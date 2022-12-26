@@ -8,84 +8,61 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <button id="start-btn">Start</button>
-    <button id="stop-btn">Stop</button>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
     <canvas id="myCanvas" width="200" height="200">
     </canvas>
 </body>
     <script>
+        let canvas;
+        let ctx;
+        let x1 = 10;
+        let x2 = 10;
+        let run = false;
 
-        function drawBox() {
-            for (let y = 0; y < 10; ++y) {
-                let startX = 100;
-                for (let i = 0; i < 20; ++i) {
-                        ctx.strokeRect(startX, startY, 20, 20);
-                    startX += 25;
-                }
-                startY += 25;
-            }
+        function start() {
+            run = true
         }
 
-        const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // go right, go down, width, height
-    
-        canvas.width = 1000;
-        canvas.height = 1000;    
-        let startY = 100;
-        let startX;
-
-        const line = {
-            x1: 25,
-            x2: 25,
-            vx: 2,
-            draw() {
-                ctx.beginPath();
-                ctx.moveTo(this.x1, 25);
-                ctx.lineTo(this.x2, 800); // x, y
-                //drawBox()
-                ctx.stroke();
-            }
+        function stop() {
+            run = false
+            x1 = 25;
+            x2 = 25;
+        }
+        
+        function init() {
+            canvas = document.getElementById('myCanvas');
+            ctx = canvas.getContext('2d');
+            draw();
         }
 
         function draw() {
-            ctx.clearRect(0, 0, 1000, 1000);
+            ctx.clearRect(0,0,1000,1000);
 
-            ctx.save();
-            for (let y = 0; y < 10; ++y) {
-                let startX = 100;
-                for (let i = 0; i < 20; ++i) {
-                        ctx.strokeRect(startX, startY, 20, 20);
-                    startX += 25;
+            let startX = 50;
+            for(let i = 0; i < 10; ++i) {
+                ctx.strokeRect(startX, 100, 20, 20)
+                startX += 25
+            }
+
+            if(run){
+                ctx.beginPath();
+                ctx.moveTo(x1,25);
+                ctx.lineTo(x2,400);
+                ctx.stroke();
+                x1 += 1
+                x2 += 1
+                if(x1 > 400 && x2 > 400) {
+                    x1 = 25
+                    x2 = 25
                 }
-                startY += 25;
-            }
-            ctx.restore();
-
-            line.draw();
-            line.x1 += line.vx;
-            line.x2 += line.vx;
-            if (line.x1 > 800 && line.x2 > 800) {
-                line.x1 = 25;
-                line.x2 = 25;
+                
             }
 
-            requestAnimationFrame(draw)
+            requestAnimationFrame(draw) 
         }
 
-        document.getElementById('start-btn').addEventListener('click', () => {
-            requestAnimationFrame(draw);
-        })
-
-        document.getElementById('stop-btn').addEventListener('click', () => {
-            //alert('here')
-            console.log('here')
-        })
-
-        // canvas.addEventListener('click', (e) => {
-        //     requestAnimationFrame(draw);
-        // })
+        init();
         
     </script>
 </html>
